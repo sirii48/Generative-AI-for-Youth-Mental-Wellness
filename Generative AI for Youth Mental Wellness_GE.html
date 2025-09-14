@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindfulGenie - Youth Mental Wellness</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Light theme variables */
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --text-color: #333;
+            --header-bg: #4F46E5;
+            --header-text: white;
+            --card-bg: white;
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            --btn-bg: #4F46E5;
+            --btn-hover: #7C3AED;
+            --btn-secondary: #EC4899;
+            --btn-secondary-hover: #DB2777;
+            --input-bg: white;
+            --input-border: #D1D5DB;
+            --chat-bg: #F9FAFB;
+            --message-bot: #E5E7EB;
+            --message-user: #4F46E5;
+            --message-text: white;
+            --footer-bg: #1F2937;
+            --footer-text: white;
+            --disclaimer-bg: #FEF3C7;
+            --disclaimer-border: #F59E0B;
+            --mood-hover: #EDE9FE;
+            --mood-selected: #4F46E5;
+            --mood-selected-text: white;
+            --history-bg: #F9FAFB;
+            --tool-bg: #F9FAFB;
+            --breathing-circle: #EC4899;
+            --affirmation-color: #4F46E5;
+            --border-color: #E5E7EB;
+            --chart-line: #4F46E5;
+            --chart-bg: rgba(79, 70, 229, 0.1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            --text-color: #e2e8f0;
+            --header-bg: #2c5282;
+            --header-text: white;
+            --card-bg: #2d3748;
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            --btn-bg: #3182ce;
+            --btn-hover: #2c5282;
+            --btn-secondary: #d53f8c;
+            --btn-secondary-hover: #b83280;
+            --input-bg: #2d3748;
+            --input-border: #4a5568;
+            --chat-bg: #1a202c;
+            --message-bot: #4a5568;
+            --message-user: #3182ce;
+            --message-text: white;
+            --footer-bg: #1a202c;
+            --footer-text: #e2e8f0;
+            --disclaimer-bg: #2c5282;
+            --disclaimer-border: #3182ce;
+            --mood-hover: #4a5568;
+            --mood-selected: #3182ce;
+            --mood-selected-text: white;
+            --history-bg: #1a202c;
+            --tool-bg: #2d3748;
+            --breathing-circle: #d53f8c;
+            --affirmation-color: #63b3ed;
+            --border-color: #4a5568;
+            --chart-line: #63b3ed;
+            --chart-bg: rgba(99, 179, 237, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: var(--header-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #EC4899;
+        }
+        
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .theme-switcher select {
+            background: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--header-bg);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: var(--text-color);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--btn-bg);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: var(--btn-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--btn-secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--btn-secondary-hover);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 4rem 0;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--header-bg);
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: var(--chat-bg);
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+        }
+        
+        .message.bot .message-content {
+            background: var(--message-bot);
+            color: var(--text-color);
+        }
+        
+        .message.user .message-content {
+            background: var(--message-user);
+            color: var(--message-text);
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 24px;
+            margin-right: 10px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .chat-input button {
+            background: var(--btn-bg);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .disclaimer {
+            background: var(--disclaimer-bg);
+            border-left: 4px solid var(--disclaimer-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        footer {
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        
+        /* Mood Tracker Styles */
+        .mood-tracker {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .mood-tracker h2 {
+            color: var(--header-bg);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .mood-emojis {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .mood-emoji-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 10px;
+            border-radius: 50%;
+        }
+        
+        .mood-emoji-container:hover {
+            transform: scale(1.1);
+            background: var(--mood-hover);
+        }
+        
+        .mood-emoji-container.selected {
+            transform: scale(1.2);
+            background: var(--mood-selected);
+            color: var(--mood-selected-text);
+        }
+        
+        .mood-emoji {
+            font-size: 3rem;
+            margin-bottom: 5px;
+        }
+        
+        .mood-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .mood-history {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--history-bg);
+            border-radius: 8px;
+        }
+        
+        .mood-history h3 {
+            color: var(--header-bg);
+            margin-bottom: 1rem;
+        }
+        
+        .mood-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .mood-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .chart-container {
+            margin-top: 2rem;
+            height: 300px;
+            position: relative;
+        }
+        
+        /* Wellness Tools Styles */
+        .wellness-tools {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .wellness-tools h2 {
+            color: var(--header-bg);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .tool-card {
+            background: var(--tool-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .tool-card h3 {
+            color: var(--header-bg);
+            margin-bottom: 1rem;
+        }
+        
+        .tool-card p {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .breathing-exercise {
+            margin: 1.5rem 0;
+        }
+        
+        .breathing-circle {
+            width: 120px;
+            height: 120px;
+            background: var(--breathing-circle);
+            border-radius: 50%;
+            margin: 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .breathing-circle.inhale {
+            animation: inhale 4s ease-in-out;
+        }
+        
+        .breathing-circle.hold {
+            animation: hold 7s ease-in-out;
+        }
+        
+        .breathing-circle.exhale {
+            animation: exhale 8s ease-in-out;
+        }
+        
+        @keyframes inhale {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.5); }
+        }
+        
+        @keyframes hold {
+            0% { transform: scale(1.5); }
+            100% { transform: scale(1.5); }
+        }
+        
+        @keyframes exhale {
+            0% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        
+        .affirmation {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--affirmation-color);
+            margin: 1.5rem 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .journaling-prompts {
+            text-align: left;
+            margin: 1.5rem 0;
+        }
+        
+        .journaling-prompts ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .journaling-prompts li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .journaling-prompts li:before {
+            content: "✍️";
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Journal Notes Styles */
+        .journal-notes {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .journal-notes h2 {
+            color: var(--header-bg);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .journal-form {
+            margin-bottom: 2rem;
+        }
+        
+        .journal-form textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--text-color);
+            resize: vertical;
+        }
+        
+        .journal-form .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .journal-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .journal-form input,
+        .journal-form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .journal-entries {
+            margin-top: 2rem;
+        }
+        
+        .journal-entry {
+            background: var(--tool-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .journal-entry-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .journal-entry-date {
+            font-weight: 500;
+            color: var(--header-bg);
+        }
+        
+        .journal-entry-mood {
+            font-size: 1.2rem;
+        }
+        
+        .journal-entry-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .journal-entry-content {
+            white-space: pre-wrap;
+            color: var(--text-color);
+        }
+        
+        /* Login Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            color: var(--header-bg);
+        }
+        
+        .close {
+            color: var(--text-color);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: var(--btn-bg);
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .user-info span {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            background: none;
+            border: 1px solid var(--btn-bg);
+            color: var(--btn-bg);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: var(--btn-bg);
+            color: white;
+        }
+        
+        .auth-section {
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin: 3rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .auth-section h2 {
+            color: var(--header-bg);
+            margin-bottom: 1rem;
+        }
+        
+        .auth-section p {
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .error-message {
+            background: #FEE2E2;
+            color: #B91C1C;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #B91C1C;
+        }
+        
+        .success-message {
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #065F46;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .features {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .mood-emojis {
+                gap: 15px;
+            }
+            
+            .mood-emoji {
+                font-size: 2.5rem;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                🧠 <span>MindfulGenie</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#mood">Mood Tracker</a></li>
+                    <li><a href="#chat">AI Chat</a></li>
+                    <li><a href="#wellness">Wellness Tools</a></li>
+                    <li><a href="#journal">Journal</a></li>
+                </ul>
+                <div class="user-info" id="user-info" style="display: none;">
+                    <span id="username-display"></span>
+                    <button class="logout-btn" id="logout-btn">Logout</button>
+                </div>
+                <div class="theme-switcher">
+                    <select id="theme-select">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="device">Device</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Generative AI for Youth Mental Wellness</h1>
+            <p>Your personal AI companion for mental wellness support, available 24/7</p>
+            <button class="btn" id="get-started-btn">Get Started</button>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="disclaimer">
+            <strong>Important:</strong> MindfulGenie is not a replacement for professional mental health care. If you're in crisis, please call 988 or text HOME to 741741.
+        </div>
+        
+        <div id="auth-required" class="auth-section" style="display: none;">
+            <h2>Welcome to MindfulGenie</h2>
+            <p>Please login or create an account to access our mental wellness tools</p>
+            <div class="auth-buttons">
+                <button class="btn" id="auth-login-btn">Login</button>
+                <button class="btn btn-secondary" id="auth-register-btn">Register</button>
+            </div>
+        </div>
+        
+        <div id="main-content" style="display: none;">
+            <section class="features">
+                <div class="feature-card" id="mood-tracker-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Mood Tracker</h3>
+                    <p>Track your emotions and identify patterns to better understand your mental health journey.</p>
+                </div>
+                
+                <div class="feature-card" id="ai-chat-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>AI Chat Companion</h3>
+                    <p>Talk to our AI companion about your feelings and get supportive responses anytime, anywhere.</p>
+                </div>
+                
+                <div class="feature-card" id="wellness-tools-card">
+                    <div class="feature-icon">🧘</div>
+                    <h3>Wellness Tools</h3>
+                    <p>Access guided meditations, breathing exercises, and mindfulness activities designed for youth.</p>
+                </div>
+                
+                <div class="feature-card" id="journal-card">
+                    <div class="feature-icon">📔</div>
+                    <h3>Journal</h3>
+                    <p>Write about your feelings and moments to reflect on your mental wellness journey.</p>
+                </div>
+            </section>
+
+            <section id="mood" class="mood-tracker">
+                <h2>Mood Tracker</h2>
+                <p style="text-align: center; margin-bottom: 1rem;">How are you feeling today? Select your mood:</p>
+                
+                <div class="mood-emojis">
+                    <div class="mood-emoji-container" data-mood="happy" data-value="7">
+                        <div class="mood-emoji">😊</div>
+                        <div class="mood-label">Happy</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="excited" data-value="6">
+                        <div class="mood-emoji">🤩</div>
+                        <div class="mood-label">Excited</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="calm" data-value="5">
+                        <div class="mood-emoji">😌</div>
+                        <div class="mood-label">Calm</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="sad" data-value="2">
+                        <div class="mood-emoji">😔</div>
+                        <div class="mood-label">Sad</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="anxious" data-value="1">
+                        <div class="mood-emoji">😰</div>
+                        <div class="mood-label">Anxious</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="angry" data-value="0">
+                        <div class="mood-emoji">😠</div>
+                        <div class="mood-label">Angry</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="tired" data-value="3">
+                        <div class="mood-emoji">😴</div>
+                        <div class="mood-label">Tired</div>
+                    </div>
+                    <div class="mood-emoji-container" data-mood="confused" data-value="4">
+                        <div class="mood-emoji">😕</div>
+                        <div class="mood-label">Confused</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button id="save-mood" class="btn">Save Mood</button>
+                </div>
+                
+                <div class="mood-history">
+                    <h3>Your Mood History</h3>
+                    <div id="mood-entries">
+                        <p style="text-align: center; color: var(--text-color);">No mood entries yet. Start tracking your mood!</p>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="moodChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="chat" class="chat-container">
+                <div class="chat-header">
+                    <h2>Chat with MindfulGenie</h2>
+                    <p>I'm here to listen and support you</p>
+                </div>
+                
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message bot">
+                        <div class="message-content">
+                            Hi! I'm MindfulGenie. How are you feeling today?
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Type your message here...">
+                    <button id="send-btn">➤</button>
+                </div>
+            </section>
+
+            <section id="wellness" class="wellness-tools">
+                <h2>Wellness Tools</h2>
+                
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h3>Breathing Exercise</h3>
+                        <p>Try the 4-7-8 breathing technique to reduce stress and anxiety</p>
+                        
+                        <div class="breathing-exercise">
+                            <div id="breathing-circle" class="breathing-circle">Breathe</div>
+                            <button id="start-breathing" class="btn">Start Exercise</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3>Daily Affirmation</h3>
+                        <p>Generate a positive affirmation to start your day</p>
+                        
+                        <div id="affirmation-text" class="affirmation">Click the button below to generate an affirmation</div>
+                        <button id="generate-affirmation" class="btn">Generate Affirmation</button>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3>Journaling Prompts</h3>
+                        <p>Reflect on these questions to explore your thoughts and feelings</p>
+                        
+                        <div class="journaling-prompts">
+                            <ul>
+                                <li>What are three things you're grateful for today?</li>
+                                <li>Describe a challenge you overcame recently</li>
+                                <li>What's something that made you smile this week?</li>
+                                <li>Write a letter to your future self</li>
+                                <li>What does self-care look like for you?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="journal" class="journal-notes">
+                <h2>Journal Notes</h2>
+                <p style="text-align: center; margin-bottom: 1rem;">Write about your feelings and moments</p>
+                
+                <div class="journal-form">
+                    <div class="form-group">
+                        <label for="journal-title">Title</label>
+                        <input type="text" id="journal-title" placeholder="Enter a title for your journal entry">
+                    </div>
+                    <div class="form-group">
+                        <label for="journal-mood">Current Mood</label>
+                        <select id="journal-mood">
+                            <option value="">Select your mood</option>
+                            <option value="happy">😊 Happy</option>
+                            <option value="excited">🤩 Excited</option>
+                            <option value="calm">😌 Calm</option>
+                            <option value="sad">😔 Sad</option>
+                            <option value="anxious">😰 Anxious</option>
+                            <option value="angry">😠 Angry</option>
+                            <option value="tired">😴 Tired</option>
+                            <option value="confused">😕 Confused</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="journal-content">Your thoughts</label>
+                        <textarea id="journal-content" placeholder="Write about your feelings and moments..."></textarea>
+                    </div>
+                    <button id="save-journal" class="btn">Save Journal Entry</button>
+                </div>
+                
+                <div class="journal-entries">
+                    <h3>Your Journal Entries</h3>
+                    <div id="journal-entries-list">
+                        <p style="text-align: center; color: var(--text-color);">No journal entries yet. Start writing!</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 MindfulGenie. Created for Generative AI for Youth Mental Wellness.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login to MindfulGenie</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div id="login-error" class="error-message" style="display: none;"></div>
+            <form class="login-form" id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p style="margin-top: 1rem; text-align: center;">
+                    Don't have an account? <a href="#" id="register-link">Register</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Register for MindfulGenie</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div id="register-error" class="error-message" style="display: none;"></div>
+            <form class="login-form" id="register-form">
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">Confirm Password</label>
+                    <input type="password" id="reg-confirm-password" required>
+                </div>
+                <button type="submit" class="btn">Register</button>
+                <p style="margin-top: 1rem; text-align: center;">
+                    Already have an account? <a href="#" id="login-link">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme functionality
+            const themeSelect = document.getElementById('theme-select');
+            const html = document.documentElement;
+            
+            // Function to set theme
+            function setTheme(theme) {
+                if (theme === 'device') {
+                    // Check device preference
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        html.setAttribute('data-theme', 'dark');
+                    } else {
+                        html.removeAttribute('data-theme');
+                    }
+                } else if (theme === 'dark') {
+                    html.setAttribute('data-theme', 'dark');
+                } else {
+                    html.removeAttribute('data-theme');
+                }
+                
+                // Save theme preference
+                localStorage.setItem('theme', theme);
+                
+                // Update mood chart if it exists
+                if (window.moodChartInstance) {
+                    updateMoodChartColors();
+                }
+            }
+            
+            // Load saved theme or default to device
+            const savedTheme = localStorage.getItem('theme') || 'device';
+            themeSelect.value = savedTheme;
+            setTheme(savedTheme);
+            
+            // Listen for theme changes
+            themeSelect.addEventListener('change', function() {
+                setTheme(this.value);
+            });
+            
+            // Listen for device theme changes
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+                    if (themeSelect.value === 'device') {
+                        setTheme('device');
+                    }
+                });
+            }
+            
+            // User authentication
+            const loginModal = document.getElementById('login-modal');
+            const registerModal = document.getElementById('register-modal');
+            const userInfo = document.getElementById('user-info');
+            const usernameDisplay = document.getElementById('username-display');
+            const getStartedBtn = document.getElementById('get-started-btn');
+            const authSection = document.getElementById('auth-required');
+            const mainContent = document.getElementById('main-content');
+            const loginLink = document.getElementById('login-link');
+            const registerLink = document.getElementById('register-link');
+            const logoutBtn = document.getElementById('logout-btn');
+            const authLoginBtn = document.getElementById('auth-login-btn');
+            const authRegisterBtn = document.getElementById('auth-register-btn');
+            
+            // Check if user is logged in
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showUserInfo(currentUser);
+                showMainContent();
+            } else {
+                showAuthSection();
+            }
+            
+            // Show user info
+            function showUserInfo(username) {
+                userInfo.style.display = 'flex';
+                usernameDisplay.textContent = username;
+            }
+            
+            // Hide user info
+            function hideUserInfo() {
+                userInfo.style.display = 'none';
+                usernameDisplay.textContent = '';
+            }
+            
+            // Show auth section
+            function showAuthSection() {
+                authSection.style.display = 'block';
+                mainContent.style.display = 'none';
+            }
+            
+            // Show main content
+            function showMainContent() {
+                authSection.style.display = 'none';
+                mainContent.style.display = 'block';
+            }
+            
+            // Close modals
+            document.querySelectorAll('.close').forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    loginModal.style.display = 'none';
+                    registerModal.style.display = 'none';
+                    // Clear error messages
+                    document.getElementById('login-error').style.display = 'none';
+                    document.getElementById('register-error').style.display = 'none';
+                });
+            });
+            
+            // Show register modal
+            registerLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'flex';
+            });
+            
+            // Show login modal
+            loginLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'flex';
+            });
+            
+            // Show login modal from auth section
+            authLoginBtn.addEventListener('click', function() {
+                loginModal.style.display = 'flex';
+            });
+            
+            // Show register modal from auth section
+            authRegisterBtn.addEventListener('click', function() {
+                registerModal.style.display = 'flex';
+            });
+            
+            // Handle login
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Get users from localStorage
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                
+                // Find user
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    // Set current user
+                    localStorage.setItem('currentUser', username);
+                    showUserInfo(username);
+                    showMainContent();
+                    loginModal.style.display = 'none';
+                    
+                    // Load user data
+                    loadUserData();
+                    
+                    // Clear form
+                    document.getElementById('login-form').reset();
+                } else {
+                    showError('login-error', 'Invalid username or password');
+                }
+            });
+            
+            // Handle registration
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('reg-username').value;
+                const password = document.getElementById('reg-password').value;
+                const confirmPassword = document.getElementById('reg-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showError('register-error', 'Passwords do not match');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showError('register-error', 'Password must be at least 6 characters long');
+                    return;
+                }
+                
+                // Get users from localStorage
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                
+                // Check if username already exists
+                if (users.find(u => u.username === username)) {
+                    showError('register-error', 'Username already exists');
+                    return;
+                }
+                
+                // Add new user
+                users.push({ username, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Set current user
+                localStorage.setItem('currentUser', username);
+                showUserInfo(username);
+                showMainContent();
+                registerModal.style.display = 'none';
+                
+                // Initialize user data
+                initializeUserData(username);
+                
+                // Clear form
+                document.getElementById('register-form').reset();
+            });
+            
+            // Show error message
+            function showError(elementId, message) {
+                const errorElement = document.getElementById(elementId);
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            // Handle logout
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('currentUser');
+                    hideUserInfo();
+                    showAuthSection();
+                }
+            });
+            
+            // Initialize user data
+            function initializeUserData(username) {
+                // Initialize mood history
+                if (!localStorage.getItem(`moodHistory_${username}`)) {
+                    localStorage.setItem(`moodHistory_${username}`, JSON.stringify([]));
+                }
+                
+                // Initialize journal entries
+                if (!localStorage.getItem(`journalEntries_${username}`)) {
+                    localStorage.setItem(`journalEntries_${username}`, JSON.stringify([]));
+                }
+                
+                // Load user data
+                loadUserData();
+            }
+            
+            // Load user data
+            function loadUserData() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    loadMoodHistory();
+                    loadJournalEntries();
+                }
+            }
+            
+            // Feature card navigation
+            document.getElementById('mood-tracker-card').addEventListener('click', function() {
+                document.getElementById('mood').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            document.getElementById('ai-chat-card').addEventListener('click', function() {
+                document.getElementById('chat').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            document.getElementById('wellness-tools-card').addEventListener('click', function() {
+                document.getElementById('wellness').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            document.getElementById('journal-card').addEventListener('click', function() {
+                document.getElementById('journal').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Chat functionality
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            // Chatbot responses
+            const responses = {
+                greetings: [
+                    "Hi there! How can I support you today?",
+                    "Hello! I'm here to listen. What's on your mind?",
+                    "Hey! I'm glad you're here. How are you feeling?"
+                ],
+                feelingSad: [
+                    "I'm sorry you're feeling this way. Would you like to talk about what's bothering you?",
+                    "It sounds like you're going through a tough time. Remember that feelings are temporary and you're not alone.",
+                    "I'm here for you. Let's try a simple breathing exercise together. Inhale for 4 counts, hold for 4, exhale for 6."
+                ],
+                feelingAnxious: [
+                    "Anxiety can be really overwhelming. Let's try grounding: Name 5 things you can see right now.",
+                    "I understand anxiety can be paralyzing. Try this: Place your hand on your heart and feel its rhythm. You're safe right now.",
+                    "When anxiety strikes, try the 5-4-3-2-1 method: Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste."
+                ],
+                feelingStressed: [
+                    "Stress can feel overwhelming. Let's break it down: What's one small thing you can do right now to feel better?",
+                    "I hear that you're stressed. Try this: Tense your muscles for 5 seconds, then release. Notice the difference.",
+                    "When stressed, our thoughts can spiral. Try writing down what's worrying you, then ask: 'Is this true? Is this helpful?'"
+                ],
+                crisis: [
+                    "I'm really concerned about you. Please call 988 or text HOME to 741741. I'm here while you wait.",
+                    "Your safety is the most important thing. Please reach out to a crisis counselor at 988. You don't have to go through this alone.",
+                    "I'm here with you. Please call 988 or text HOME to 741741. You matter and there are people who want to help."
+                ],
+                default: [
+                    "I'm here to listen. Can you tell me more about how you're feeling?",
+                    "Your feelings are valid. What would be most helpful for you right now?",
+                    "I'm here to support you. What's on your mind today?"
+                ]
+            };
+            
+            // Function to add message to chat
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+                messageDiv.innerHTML = `<div class="message-content">${message}</div>`;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to get bot response
+            function getBotResponse(userMessage) {
+                const message = userMessage.toLowerCase();
+                
+                // Crisis detection
+                if (message.includes('suicide') || message.includes('kill myself') || 
+                    message.includes('end it') || message.includes('hurt myself') || 
+                    message.includes('die') || message.includes('worthless')) {
+                    return responses.crisis[Math.floor(Math.random() * responses.crisis.length)];
+                }
+                
+                // Feeling detection
+                if (message.includes('sad') || message.includes('depress') || message.includes('cry') || message.includes('lonely')) {
+                    return responses.feelingSad[Math.floor(Math.random() * responses.feelingSad.length)];
+                }
+                
+                if (message.includes('anxious') || message.includes('anxiety') || message.includes('panic') || message.includes('worried')) {
+                    return responses.feelingAnxious[Math.floor(Math.random() * responses.feelingAnxious.length)];
+                }
+                
+                if (message.includes('stress') || message.includes('overwhelm') || message.includes('pressure')) {
+                    return responses.feelingStressed[Math.floor(Math.random() * responses.feelingStressed.length)];
+                }
+                
+                // Greeting detection
+                if (message.includes('hi') || message.includes('hello') || message.includes('hey') || message.includes('good morning')) {
+                    return responses.greetings[Math.floor(Math.random() * responses.greetings.length)];
+                }
+                
+                // Default response
+                return responses.default[Math.floor(Math.random() * responses.default.length)];
+            }
+            
+            // Function to handle sending message
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message
+                addMessage(message, true);
+                
+                // Clear input
+                userInput.value = '';
+                
+                // Get and add bot response after a short delay
+                setTimeout(() => {
+                    const botResponse = getBotResponse(message);
+                    addMessage(botResponse);
+                }, 500);
+            }
+            
+            // Event listeners for chat
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Mood Tracker functionality
+            const moodEmojis = document.querySelectorAll('.mood-emoji-container');
+            const saveMoodBtn = document.getElementById('save-mood');
+            const moodEntriesContainer = document.getElementById('mood-entries');
+            let selectedMood = null;
+            let moodChart = null;
+            
+            // Load mood history from localStorage
+            function loadMoodHistory() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) return;
+                
+                const moodHistory = JSON.parse(localStorage.getItem(`moodHistory_${currentUser}`)) || [];
+                
+                if (moodHistory.length === 0) {
+                    moodEntriesContainer.innerHTML = '<p style="text-align: center; color: var(--text-color);">No mood entries yet. Start tracking your mood!</p>';
+                    return;
+                }
+                
+                moodEntriesContainer.innerHTML = '';
+                
+                // Show last 7 entries
+                const recentEntries = moodHistory.slice(-7).reverse();
+                
+                recentEntries.forEach(entry => {
+                    const entryDiv = document.createElement('div');
+                    entryDiv.className = 'mood-entry';
+                    entryDiv.innerHTML = `
+                        <span>${entry.date}</span>
+                        <span>${entry.moodEmoji} ${entry.moodName}</span>
+                    `;
+                    moodEntriesContainer.appendChild(entryDiv);
+                });
+                
+                // Update chart
+                updateMoodChart(moodHistory);
+            }
+            
+            // Initialize mood history on page load
+            loadMoodHistory();
+            
+            // Mood emoji selection
+            moodEmojis.forEach(emoji => {
+                emoji.addEventListener('click', function() {
+                    // Remove previous selection
+                    moodEmojis.forEach(e => e.classList.remove('selected'));
+                    
+                    // Add selection to clicked emoji
+                    this.classList.add('selected');
+                    selectedMood = {
+                        emoji: this.querySelector('.mood-emoji').textContent,
+                        name: this.dataset.mood,
+                        value: parseInt(this.dataset.value)
+                    };
+                });
+            });
+            
+            // Save mood
+            saveMoodBtn.addEventListener('click', function() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) {
+                    alert('Please login to save your mood');
+                    return;
+                }
+                
+                if (!selectedMood) {
+                    alert('Please select a mood first');
+                    return;
+                }
+                
+                // Get current date
+                const now = new Date();
+                const dateStr = now.toLocaleDateString();
+                
+                // Get existing mood history
+                const moodHistory = JSON.parse(localStorage.getItem(`moodHistory_${currentUser}`)) || [];
+                
+                // Check if there's already an entry for today
+                const todayEntryIndex = moodHistory.findIndex(entry => entry.date === dateStr);
+                
+                if (todayEntryIndex !== -1) {
+                    // Update today's entry
+                    moodHistory[todayEntryIndex] = {
+                        date: dateStr,
+                        moodEmoji: selectedMood.emoji,
+                        moodName: selectedMood.name,
+                        value: selectedMood.value
+                    };
+                } else {
+                    // Add new entry
+                    moodHistory.push({
+                        date: dateStr,
+                        moodEmoji: selectedMood.emoji,
+                        moodName: selectedMood.name,
+                        value: selectedMood.value
+                    });
+                }
+                
+                // Save to localStorage
+                localStorage.setItem(`moodHistory_${currentUser}`, JSON.stringify(moodHistory));
+                
+                // Reset selection
+                moodEmojis.forEach(e => e.classList.remove('selected'));
+                selectedMood = null;
+                
+                // Reload mood history
+                loadMoodHistory();
+                
+                // Show success message
+                alert('Mood saved successfully!');
+            });
+            
+            // Function to update mood chart colors based on theme
+            function updateMoodChartColors() {
+                if (!window.moodChartInstance) return;
+                
+                const isDarkMode = html.getAttribute('data-theme') === 'dark';
+                const lineColor = isDarkMode ? '#63b3ed' : '#4F46E5';
+                const bgColor = isDarkMode ? 'rgba(99, 179, 237, 0.1)' : 'rgba(79, 70, 229, 0.1)';
+                
+                window.moodChartInstance.data.datasets[0].borderColor = lineColor;
+                window.moodChartInstance.data.datasets[0].backgroundColor = bgColor;
+                window.moodChartInstance.data.datasets[0].pointBackgroundColor = lineColor;
+                window.moodChartInstance.update();
+            }
+            
+            // Update mood chart
+            function updateMoodChart(moodHistory) {
+                const ctx = document.getElementById('moodChart').getContext('2d');
+                
+                // Prepare data for chart
+                const labels = [];
+                const data = [];
+                
+                // Get last 7 entries
+                const recentEntries = moodHistory.slice(-7);
+                
+                recentEntries.forEach(entry => {
+                    labels.push(entry.date);
+                    data.push(entry.value);
+                });
+                
+                // Destroy existing chart if it exists
+                if (moodChart) {
+                    moodChart.destroy();
+                }
+                
+                // Create new chart
+                moodChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Mood Level',
+                            data: data,
+                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--chart-line'),
+                            backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--chart-bg'),
+                            borderWidth: 3,
+                            pointBackgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--chart-line'),
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 7,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        const moods = ['😠', '😰', '😔', '😴', '😕', '😌', '🤩', '😊'];
+                                        return moods[value] || '';
+                                    },
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-color')
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Mood',
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-color')
+                                },
+                                grid: {
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date',
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-color')
+                                },
+                                ticks: {
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-color')
+                                },
+                                grid: {
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const moods = ['Angry', 'Anxious', 'Sad', 'Tired', 'Confused', 'Calm', 'Excited', 'Happy'];
+                                        return 'Mood: ' + moods[context.parsed.y];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Store chart instance globally
+                window.moodChartInstance = moodChart;
+            }
+            
+            // Wellness Tools functionality
+            const breathingCircle = document.getElementById('breathing-circle');
+            const startBreathingBtn = document.getElementById('start-breathing');
+            const affirmationText = document.getElementById('affirmation-text');
+            const generateAffirmationBtn = document.getElementById('generate-affirmation');
+            
+            // Breathing exercise
+            let breathingInterval;
+            let breathingPhase = 'inhale';
+            let breathingCount = 0;
+            
+            startBreathingBtn.addEventListener('click', function() {
+                if (breathingInterval) {
+                    // Stop exercise
+                    clearInterval(breathingInterval);
+                    breathingInterval = null;
+                    breathingCircle.className = 'breathing-circle';
+                    breathingCircle.textContent = 'Breathe';
+                    startBreathingBtn.textContent = 'Start Exercise';
+                    return;
+                }
+                
+                // Start exercise
+                startBreathingBtn.textContent = 'Stop Exercise';
+                breathingPhase = 'inhale';
+                breathingCount = 0;
+                
+                breathingInterval = setInterval(() => {
+                    breathingCount++;
+                    
+                    if (breathingPhase === 'inhale') {
+                        breathingCircle.className = 'breathing-circle inhale';
+                        breathingCircle.textContent = 'Inhale...';
+                        
+                        if (breathingCount >= 4) {
+                            breathingPhase = 'hold';
+                            breathingCount = 0;
+                        }
+                    } else if (breathingPhase === 'hold') {
+                        breathingCircle.className = 'breathing-circle hold';
+                        breathingCircle.textContent = 'Hold...';
+                        
+                        if (breathingCount >= 7) {
+                            breathingPhase = 'exhale';
+                            breathingCount = 0;
+                        }
+                    } else if (breathingPhase === 'exhale') {
+                        breathingCircle.className = 'breathing-circle exhale';
+                        breathingCircle.textContent = 'Exhale...';
+                        
+                        if (breathingCount >= 8) {
+                            // Reset cycle
+                            breathingPhase = 'inhale';
+                            breathingCount = 0;
+                        }
+                    }
+                }, 1000);
+            });
+            
+            // Affirmation generator
+            const affirmations = [
+                "You are stronger than you know",
+                "This feeling will pass",
+                "You deserve kindness and compassion",
+                "Your feelings are valid",
+                "You are not alone",
+                "You have survived 100% of your hardest days",
+                "You are enough just as you are",
+                "Every day is a new opportunity",
+                "You are capable of amazing things",
+                "Your mental health is a priority"
+            ];
+            
+            generateAffirmationBtn.addEventListener('click', function() {
+                const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+                affirmationText.textContent = randomAffirmation;
+            });
+            
+            // Journal functionality
+            const journalTitle = document.getElementById('journal-title');
+            const journalMood = document.getElementById('journal-mood');
+            const journalContent = document.getElementById('journal-content');
+            const saveJournalBtn = document.getElementById('save-journal');
+            const journalEntriesList = document.getElementById('journal-entries-list');
+            
+            // Load journal entries
+            function loadJournalEntries() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) return;
+                
+                const journalEntries = JSON.parse(localStorage.getItem(`journalEntries_${currentUser}`)) || [];
+                
+                if (journalEntries.length === 0) {
+                    journalEntriesList.innerHTML = '<p style="text-align: center; color: var(--text-color);">No journal entries yet. Start writing!</p>';
+                    return;
+                }
+                
+                journalEntriesList.innerHTML = '';
+                
+                // Show entries in reverse order (newest first)
+                journalEntries.slice().reverse().forEach(entry => {
+                    const entryDiv = document.createElement('div');
+                    entryDiv.className = 'journal-entry';
+                    entryDiv.innerHTML = `
+                        <div class="journal-entry-header">
+                            <div class="journal-entry-date">${entry.date}</div>
+                            <div class="journal-entry-mood">${entry.moodEmoji} ${entry.moodName}</div>
+                        </div>
+                        <div class="journal-entry-title">${entry.title}</div>
+                        <div class="journal-entry-content">${entry.content}</div>
+                    `;
+                    journalEntriesList.appendChild(entryDiv);
+                });
+            }
+            
+            // Initialize journal entries on page load
+            loadJournalEntries();
+            
+            // Save journal entry
+            saveJournalBtn.addEventListener('click', function() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) {
+                    alert('Please login to save journal entries');
+                    return;
+                }
+                
+                const title = journalTitle.value.trim();
+                const mood = journalMood.value;
+                const content = journalContent.value.trim();
+                
+                if (!title || !content) {
+                    alert('Please fill in both title and content');
+                    return;
+                }
+                
+                // Get mood emoji and name
+                let moodEmoji = '';
+                let moodName = '';
+                
+                if (mood) {
+                    const moodOption = journalMood.options[journalMood.selectedIndex];
+                    moodEmoji = moodOption.text.split(' ')[0];
+                    moodName = moodOption.text.split(' ')[1];
+                }
+                
+                // Get current date and time
+                const now = new Date();
+                const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+                
+                // Get existing journal entries
+                const journalEntries = JSON.parse(localStorage.getItem(`journalEntries_${currentUser}`)) || [];
+                
+                // Add new entry
+                journalEntries.push({
+                    date: dateStr,
+                    title: title,
+                    moodEmoji: moodEmoji,
+                    moodName: moodName,
+                    content: content
+                });
+                
+                // Save to localStorage
+                localStorage.setItem(`journalEntries_${currentUser}`, JSON.stringify(journalEntries));
+                
+                // Clear form
+                journalTitle.value = '';
+                journalMood.value = '';
+                journalContent.value = '';
+                
+                // Reload journal entries
+                loadJournalEntries();
+                
+                // Show success message
+                alert('Journal entry saved successfully!');
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
